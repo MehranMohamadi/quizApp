@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       questionsAnswered: 0,
-      totalCorrect:0,
+      totalCorrect: 0,
       questions: [
         {
           q: 'What is 2 + 2?',
@@ -90,12 +90,16 @@ export default {
       ]
     }
   },
-  methods:{
-    questionAnswered(is_correct){
-       if (is_correct){
-         this.totalCorrect++
-       }
-       this.questionsAnswered++
+  methods: {
+    questionAnswered(is_correct) {
+      if (is_correct) {
+        this.totalCorrect++
+      }
+      this.questionsAnswered++
+    },
+    reset() {
+      this.questionsAnswered = 0;
+      this.totalCorrect = 0
     }
   }
 }
@@ -105,13 +109,17 @@ export default {
 
 <template>
   <div class="ctr">
+    <transition name="fade" mode="out-in">
     <Question
         v-if="questionsAnswered < questions.length"
         :questions="questions" v-bind:questionsAnswered="questionsAnswered"
         @question-answered="questionAnswered"/>
-    <Result v-else/>
+    <Result v-else :results="results" :totalCorrect="totalCorrect"/>
+    </transition>
+    <button type="button" class="reset-btn" @click.prevent="reset"
+            v-if="this.questionsAnswered===questions.length">Reset
+    </button>
 
-    <button type="button" class="reset-btn">Reset</button>
   </div>
 </template>
 
